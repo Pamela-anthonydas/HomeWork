@@ -1,0 +1,111 @@
+
+Sub Stock()
+
+
+    ' --------------------------------------------
+    ' LOOP THROUGH ALL SHEETS
+    ' --------------------------------------------
+    For Each ws In Worksheets
+
+        'Variable declarations
+        Dim MyMax, MyMin As Long, MaxCell As Range
+        Dim MinCell As Range
+        Dim total, Row, X As Integer
+        Dim lastRow As Long
+
+        'Counter Initializations
+        total = 0
+        Row = 2
+        X = 0
+        'Calculate last row of each worksheet
+        lastRow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+            
+        'Loop through each row of worksheet
+        For i = 2 To lastRow
+                    
+            ' Check if we are still within the ticker category, if it is not...
+            If ws.Cells(i, 1).Value <> ws.Cells(i + 1, 1).Value Then
+                total = total + ws.Cells(i, 7).Value
+                        
+                'Assign sum of stock volume for a particular ticker group to summary table in same worksheet
+                ws.Cells(Row, 16) = total
+                'Assign ticker symbol  for a particular ticker group to summary table in same worksheet
+                ws.Cells(Row, 11) = ws.Cells(i, 1).Value
+                'Find  opening/close price at the beginning/end of  year and assign Open/close Price variable
+                Open_Price = ws.Cells(i - X, 3).Value
+                Close_Price = ws.Cells(i, 6).Value
+                
+                'Assign opening/close price at the beginning/end of  year for a particular ticker group to summary table in same worksheet
+                ws.Cells(Row, 12).Value = Open_Price
+                ws.Cells(Row, 13).Value = Close_Price
+                
+                'Calculate yearly change and assign value to summary table in same worksheet
+                Diff = Close_Price - Open_Price
+                ws.Cells(Row, 14).Value = Diff
+                        
+                'Calculate percentage change and assign value to summary table in same worksheet
+                If Open_Price <> 0 Then
+                    Percentage_Increase = Diff / Open_Price
+                End If
+                ws.Cells(Row, 15).Value = Percentage_Increase
+                        
+                'conditional formatting that will highlight positive change in green and negative change in red.
+                If Diff < 0 Then
+                ws.Cells(Row, 14).Interior.ColorIndex = 3
+                Else
+                ws.Cells(Row, 14).Interior.ColorIndex = 4
+                End If
+                       
+                'Reset counters
+                total = 0
+                Open_Price = 0
+                Row = Row + 1
+                X = 0
+            
+            Else
+                ' If the cell immediately following a row is the same ticker...
+                total = total + ws.Cells(i, 7).Value
+                X = X + 1
+                        
+            End If
+        Next i
+        
+        'Assign Headers and format summary table
+        ws.Range("O:O").Style = "Percent"
+        ws.Range("K1").Value = "Ticker"
+        ws.Range("L1").Value = "Open Price"
+        ws.Range("M1").Value = "Close Price"
+        ws.Range("N1").Value = "Yearly Change"
+        ws.Range("O1").Value = "Percent Change"
+        ws.Range("P1").Value = "Total Stock Volume"
+        ws.Range("L1").Value = "Open Price"
+        ws.Range("U1").Value = "Ticker"
+        ws.Range("V1").Value = "Value"
+        ws.Range("T2").Value = "Greatest % Increase"
+        ws.Range("T3").Value = "Greatest % Decrease"
+        ws.Range("T4").Value = "Greatest Total Volume"
+                    
+                    
+         'Find the Greatest % increase of a stock and assign its value and ticker symbol to summary sheet
+        Set MaxCell = ws.Range("N:N").Find(Application.WorksheetFunction.Max(ws.Range("N:N")), Lookat:=xlWhole)
+        ws.Range("V2") = Application.WorksheetFunction.Max(ws.Range("O:O"))
+        ws.Range("U2") = MaxCell.Offset(, -3)
+        ws.Cells(2, 22).Style = "Percent"
+
+        'Find the Greatest % decrease of a stock and assign its value and ticker symbol to summary sheet
+        Set MinCell = ws.Range("N:N").Find(Application.WorksheetFunction.Min(ws.Range("N:N")), Lookat:=xlWhole)
+        ws.Range("V3") = Application.WorksheetFunction.Min(ws.Range("O:O"))
+        ws.Cells(3, 22).Style = "Percent"
+        ws.Range("U3") = MinCell.Offset(, -3)
+
+        'Find the Greatest total volume of a stock and assign its value and ticker symbol to summary sheet
+        Set MaxSum = ws.Range("P:P").Find(Application.WorksheetFunction.Min(ws.Range("P:P")), Lookat:=xlWhole)
+        ws.Range("V4") = ws.Application.WorksheetFunction.Max(ws.Range("P:P"))
+        ws.Range("U4") = MaxSum.Offset(, -5)
+         
+        'Auto fit data for a clean display
+        ws.Columns("A:V").AutoFit
+                    
+    Next ws
+
+End Sub

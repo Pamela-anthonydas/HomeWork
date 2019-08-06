@@ -1,0 +1,54 @@
+Sub Stock()
+
+
+    ' Add a sheet named "Summary Sheet"
+    Sheets.Add.Name = "Summary_Sheet"
+    
+    'move created sheet to be first sheet
+    Sheets("Summary_Sheet").Move Before:=Sheets(1)
+    
+    ' Specify the location of the combined sheet
+    Set combined_sheet = Worksheets("Summary_Sheet")
+    
+    ' --------------------------------------------
+    ' LOOP THROUGH ALL SHEETS
+    ' --------------------------------------------
+    For Each ws In Worksheets
+        ' Created a Variable to Hold File Name
+        Dim WorksheetName As String
+        
+        ' Created a Variable to Hold  Last Row, Volume_sum
+        Dim LastRow, Volume_sum
+        
+    ' --------------------------------------------------------------------
+    ' CALCULATE SUM OF STOCK VOLUME FOR EACH SHEET EXCLUDING SUMMARY SHEET
+    ' --------------------------------------------------------------------
+        If ws.Name <> "Summary_Sheet" Then
+        
+            ' Determine the Last Row of each worksheet
+            LastRow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+        
+            ' Calculate sum of stock volume of each worksheet
+            Volume_sum = WorksheetFunction.Sum(ws.Range("G2:G" & LastRow))
+
+        
+            'Determine the Last Row of "Summary Sheet"
+            lastR = combined_sheet.Cells(Rows.Count, "B").End(xlUp).Row + 1
+            
+            'Assign sum of stock volume in each worksheet to summary sheet
+            combined_sheet.Range("B" & lastR).Value = Volume_sum
+            
+            'Assign Ticker Symbol in each worksheet to summary sheet
+            combined_sheet.Range("A" & lastR).Value = ws.Range("A2").Value
+            
+        End If
+        
+    Next ws
+    
+    'Name column headers in summary sheet and autofit to display data
+    combined_sheet.Range("A1").Value = "Ticker"
+    combined_sheet.Range("B1").Value = "Total Stock Volume"
+    combined_sheet.Columns("A:G").AutoFit
+     
+End Sub
+
