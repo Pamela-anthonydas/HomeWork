@@ -7,6 +7,6 @@
 	
 ***VBA Homework - Due date 5-Aug-19***
 	VBAHW_alphabtical_testing_Pamela AnthonyDas.xlsm
-	VBAHW_Multiple_year_stock_data_Pamela AnthonyDas.xlsm
+	VBAHW_ModerateAndHard_Multiple_year_stock_data_Pamela AnthonyDas.xlsm
 	VBAHW_Alphabet testing_result.PNG
-	VBAHW_ultiple_year_stock_data.PNG
+	VBAHW_ModerateAndHard_Multiple_year_stock_data.PNG
