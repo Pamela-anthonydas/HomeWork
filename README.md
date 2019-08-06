@@ -6,7 +6,7 @@
 	ExcelHW_StarterBook_Pamela AnthonyDas.xlsx
 	
 ***VBA Homework - Due date 5-Aug-19***
-  **Includes all levels - Easy, Moderate, Hard, Challenge**
+  ** Script includes all levels - Easy, Moderate, Hard, Challenge**
 	VBAHW_alphabtical_testing_Pamela AnthonyDas.xlsm
 	VBAHW_ModerateAndHard_Multiple_year_stock_data_Pamela AnthonyDas.xlsm
 	VBAHW_Alphabet testing_result.PNG
